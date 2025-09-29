@@ -1,0 +1,37 @@
+version: "3.8"
+
+# The 'services' key MUST be aligned with the 'version' key at the very left.
+services:
+  # 'mongo' service name indented by 2 spaces
+  mongo:
+    image: mongo
+    container_name: mongo
+    restart: always
+    # 'ports' key indented by 2 spaces under 'mongo'
+    ports:
+      # List item indented by 2 spaces, with a space after the dash
+      - "27017:27017"
+    # CORRECTED: Changed 'environemt' to 'environment'
+    environment:
+      # Environment variables indented by 2 spaces under 'environment'
+      MONGO_INITDB_ROOT_USERNAME: admin 
+      MONGO_INITDB_ROOT_PASSWORD: qwerty
+      
+  # 'mongo-express' service name indented by 2 spaces
+  mongo-express:
+    image: mongo-express
+    container_name: mongo-express
+    restart: always
+    depends_on:
+      - mongo # Ensure mongo starts before mongo-express
+    # CORRECTED: Changed 'port' to 'ports' (plural)
+    ports:
+      # List item indented by 2 spaces, with a space after the dash
+      - "8081:8081"
+    environment:
+      # Environment variables to connect to the 'mongo' service
+      # ME_CONFIG_MONGODB_URL handles the connection details
+    ME_CONFIG_MONGODB_URL: "mongodb://admin:qwerty@mongo:27017"
+      # These set the login credentials for the Mongo Express UI
+      ME_CONFIG_BASICAUTH_USERNAME: admin # Use any username/password for the web UI
+      ME_CONFIG_BASICAUTH_PASSWORD: qwerty # This is the web UI login
